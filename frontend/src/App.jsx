@@ -7,7 +7,6 @@ import Home from "./pages/Home";
 import CreateReel from "./pages/CreateReel";
 import Viewer from "./pages/Viewer";
 
-import "./App.css";
 
 function App() {
   return (
