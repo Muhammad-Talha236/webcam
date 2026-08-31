@@ -6,7 +6,7 @@ const stories = [
   { name: "_taimoor.a...", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" },
   { name: "nahadmug...", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" },
   { name: "najoomite...", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
-  { name: "ahtresham...", img: "https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&auto=format&fit=crop&q=80" },
+  { name: "najoomite...", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
 ];
 
 const posts = [
@@ -15,7 +15,7 @@ const posts = [
     username: "startuppakistansp",
     verified: true,
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-    location: "Hunza Valley, Pakistan",
+    location: "Pakistan",
     postImg: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=80",
     caption: "Foreign Tourism in Pakistan is reaching breathtaking new heights! 🏔️✨",
     likes: "12,482",

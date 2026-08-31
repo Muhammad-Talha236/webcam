@@ -1,16 +1,16 @@
 const WebSocket = require("ws");
 
-const PORT = 8080;
+// Dynamic port provided by cloud host (Render, Railway, etc.)
+const PORT = process.env.PORT || 8080;
 
 const wss = new WebSocket.Server({
-  host: "0.0.0.0",
+  host: "0.0.0.0", // Required for container binding
   port: PORT,
 });
-
 let client = null;
 let viewer = null;
 
-console.log(`Signaling server running on port ${PORT}`);
+console.log(`Signaling server running on port ${PORT}[cite: 2]`);
 
 function send(socket, data) {
   if (
@@ -22,7 +22,7 @@ function send(socket, data) {
 }
 
 wss.on("connection", (socket) => {
-  console.log("New WebSocket connection");
+  console.log("New WebSocket connection[cite: 2]");
 
   socket.on("message", (message) => {
     let data;
@@ -30,18 +30,14 @@ wss.on("connection", (socket) => {
     try {
       data = JSON.parse(message.toString());
     } catch {
-      console.log("Invalid signaling message");
+      console.log("Invalid signaling message[cite: 2]");
       return;
     }
-
-    // ==============================
-    // CAPTURE CLIENT
-    // ==============================
 
     if (data.type === "client") {
       client = socket;
 
-      console.log("Capture client registered");
+      console.log("Capture client registered[cite: 2]");
 
       send(client, {
         type: "registered",
@@ -52,7 +48,7 @@ wss.on("connection", (socket) => {
         viewer &&
         viewer.readyState === WebSocket.OPEN
       ) {
-        console.log("Viewer already connected");
+        console.log("Viewer already connected[cite: 2]");
 
         send(client, {
           type: "viewer-ready",
@@ -62,14 +58,10 @@ wss.on("connection", (socket) => {
       return;
     }
 
-    // ==============================
-    // VIEWER
-    // ==============================
-
     if (data.type === "viewer") {
       viewer = socket;
 
-      console.log("Viewer registered");
+      console.log("Viewer registered[cite: 2]");
 
       send(viewer, {
         type: "registered",
@@ -80,9 +72,7 @@ wss.on("connection", (socket) => {
         client &&
         client.readyState === WebSocket.OPEN
       ) {
-        console.log(
-          "Notifying client: viewer-ready"
-        );
+        console.log("Notifying client: viewer-ready[cite: 2]");
 
         send(client, {
           type: "viewer-ready",
@@ -92,12 +82,8 @@ wss.on("connection", (socket) => {
       return;
     }
 
-    // ==============================
-    // CAPTURE READY
-    // ==============================
-
     if (data.type === "capture-ready") {
-      console.log("Capture media is ready");
+      console.log("Capture media is ready[cite: 2]");
 
       if (
         viewer &&
@@ -111,12 +97,8 @@ wss.on("connection", (socket) => {
       return;
     }
 
-    // ==============================
-    // OFFER
-    // ==============================
-
     if (data.type === "offer") {
-      console.log("Forwarding OFFER -> viewer");
+      console.log("Forwarding OFFER -> viewer[cite: 2]");
 
       send(viewer, {
         type: "offer",
@@ -126,12 +108,8 @@ wss.on("connection", (socket) => {
       return;
     }
 
-    // ==============================
-    // ANSWER
-    // ==============================
-
     if (data.type === "answer") {
-      console.log("Forwarding ANSWER -> client");
+      console.log("Forwarding ANSWER -> client[cite: 2]");
 
       send(client, {
         type: "answer",
@@ -140,10 +118,6 @@ wss.on("connection", (socket) => {
 
       return;
     }
-
-    // ==============================
-    // ICE
-    // ==============================
 
     if (data.type === "ice-candidate") {
       if (socket === client) {
@@ -160,7 +134,7 @@ wss.on("connection", (socket) => {
 
   socket.on("close", () => {
     if (socket === client) {
-      console.log("Capture client disconnected");
+      console.log("Capture client disconnected[cite: 2]");
 
       client = null;
 
@@ -170,7 +144,7 @@ wss.on("connection", (socket) => {
     }
 
     if (socket === viewer) {
-      console.log("Viewer disconnected");
+      console.log("Viewer disconnected[cite: 2]");
 
       viewer = null;
 
@@ -181,9 +155,6 @@ wss.on("connection", (socket) => {
   });
 
   socket.on("error", (error) => {
-    console.error(
-      "WebSocket error:",
-      error.message
-    );
+    console.error("WebSocket error:");
   });
 });

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-const SIGNALING_URL = "ws://localhost:8080";
-
+const SIGNALING_URL = import.meta.env.VITE_SIGNALING_URL || "ws://localhost:8080";
 function Viewer() {
   const videoRef = useRef(null);
   const socketRef = useRef(null);

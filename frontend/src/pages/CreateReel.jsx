@@ -7,7 +7,6 @@ export default function CreateReel() {
   const streamRef = useRef(null);
   const peerRef = useRef(null);
   const viewerReadyRef = useRef(false);
-
   const [cameraActive, setCameraActive] = useState(false);
   const [connected, setConnected] = useState(false);
   const [viewerConnected, setViewerConnected] = useState(false);
@@ -17,16 +16,19 @@ export default function CreateReel() {
     const peer = new RTCPeerConnection({
       iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     });
+
     peer.onicecandidate = (event) => {
       if (event.candidate && socketRef.current?.readyState === WebSocket.OPEN) {
         socketRef.current.send(JSON.stringify({ type: "ice-candidate", candidate: event.candidate }));
       }
     };
+
     peer.onconnectionstatechange = () => {
       if (peer.connectionState === "failed" || peer.connectionState === "disconnected" || peer.connectionState === "closed") {
         setViewerConnected(false);
       }
     };
+
     peerRef.current = peer;
     return peer;
   };
@@ -35,18 +37,21 @@ export default function CreateReel() {
     const stream = streamRef.current;
     if (!stream || socketRef.current?.readyState !== WebSocket.OPEN) return;
 
-    if (peerRef.current) peerRef.current.close();
-    const peer = createPeerConnection();
+    if (peerRef.current) {
+      peerRef.current.close();
+    }
 
+    const peer = createPeerConnection();
     stream.getTracks().forEach((track) => peer.addTrack(track, stream));
+
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
-
     socketRef.current.send(JSON.stringify({ type: "offer", offer }));
   };
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8080");
+    const SIGNALING_URL = import.meta.env.VITE_SIGNALING_URL || "ws://localhost:8080";
+    const socket = new WebSocket(SIGNALING_URL);
     socketRef.current = socket;
 
     socket.onopen = () => {
@@ -61,7 +66,9 @@ export default function CreateReel() {
         if (data.type === "viewer-ready") {
           viewerReadyRef.current = true;
           setViewerConnected(true);
-          if (streamRef.current) await createOffer();
+          if (streamRef.current) {
+            await createOffer();
+          }
         } else if (data.type === "answer" && peerRef.current) {
           await peerRef.current.setRemoteDescription(new RTCSessionDescription(data.answer));
         } else if (data.type === "ice-candidate" && peerRef.current && data.candidate) {
@@ -90,11 +97,13 @@ export default function CreateReel() {
       streamRef.current = stream;
 
       const video = videoRef.current;
-      video.srcObject = stream;
-      video.muted = true;
-      video.playsInline = true;
-      video.autoplay = true;
-      await video.play();
+      if (video) {
+        video.srcObject = stream;
+        video.muted = true;
+        video.playsInline = true;
+        video.autoplay = true;
+        await video.play();
+      }
 
       setCameraActive(true);
 
@@ -102,7 +111,7 @@ export default function CreateReel() {
         socketRef.current.send(JSON.stringify({ type: "capture-ready" }));
       }
 
-      if (viewerReadyRef.current) {
+      if (streamRef.current) {
         await createOffer();
       }
     } catch (err) {
@@ -141,46 +150,45 @@ export default function CreateReel() {
         </Link>
         <nav className="ig-nav">
           <Link to="/" className="ig-nav-item">
-            <span className="ig-nav-icon">🏠</span>
+            <span className="ig-nav-icon"> </span>
             <span>Home</span>
           </Link>
           <button className="ig-nav-item">
-            <span className="ig-nav-icon">🔍</span>
+            <span className="ig-nav-icon"> </span>
             <span>Search</span>
           </button>
           <button className="ig-nav-item">
-            <span className="ig-nav-icon">🧭</span>
+            <span className="ig-nav-icon"> </span>
             <span>Explore</span>
           </button>
           <Link to="/viewer" className="ig-nav-item">
-            <span className="ig-nav-icon">▶</span>
+            <span className="ig-nav-icon"> </span>
             <span>Reels</span>
           </Link>
           <button className="ig-nav-item">
-            <span className="ig-nav-icon">💬</span>
+            <span className="ig-nav-icon"> </span>
             <span>Messages</span>
           </button>
           <button className="ig-nav-item">
-            <span className="ig-nav-icon">♡</span>
+            <span className="ig-nav-icon"> </span>
             <span>Notifications</span>
           </button>
           <Link to="/create" className="ig-nav-item active">
-            <span className="ig-nav-icon">➕</span>
+            <span className="ig-nav-icon"> </span>
             <span>Create</span>
           </Link>
           <button className="ig-nav-item">
-            <span className="ig-nav-icon">👤</span>
+            <span className="ig-nav-icon"> </span>
             <span>Profile</span>
           </button>
         </nav>
         <div className="ig-sidebar-bottom">
           <button className="ig-nav-item">
-            <span className="ig-nav-icon">☰</span>
+            <span className="ig-nav-icon"> </span>
             <span>More</span>
           </button>
         </div>
       </aside>
-
       {/* Create Main Section */}
       <main className="create-reel-main">
         <div className="create-reel-header">
@@ -193,7 +201,6 @@ export default function CreateReel() {
             {connected ? "Server connected" : "Connecting"}
           </div>
         </div>
-
         <section className="create-card">
           <div className="create-card-header">
             <div className="create-user">
@@ -203,42 +210,38 @@ export default function CreateReel() {
                 <span>New Reel Broadcast</span>
               </div>
             </div>
-            <button className="create-more">•••</button>
+            <button className="create-more"> </button>
           </div>
-
           <div className="create-camera">
             <video ref={videoRef} autoPlay playsInline muted />
             {!cameraActive && (
               <div className="create-camera-empty">
-                <div className="camera-big-icon">📷</div>
+                <div className="camera-big-icon"> </div>
                 <h2>Camera Preview</h2>
                 <p>Start your camera and microphone to broadcast your live reel.</p>
               </div>
             )}
             {cameraActive && (
               <div className="camera-live-badge">
-                <span>●</span> LIVE
+                <span> </span> LIVE
               </div>
             )}
           </div>
-
           {error && <div className="create-error">{error}</div>}
-
           <div className="create-controls">
             {!cameraActive ? (
               <button className="start-camera-button" onClick={startCamera}>
-                <span>▶</span> Start Camera + Microphone
+                <span> </span> Start Camera + Microphone
               </button>
             ) : (
               <button className="stop-camera-button" onClick={stopCamera}>
-                <span>⏹</span> Stop Camera + Microphone
+                <span> </span> Stop Camera + Microphone
               </button>
             )}
           </div>
-
           <div className="create-status-grid">
             <div className="create-status-card">
-              <span className="status-card-icon">📹</span>
+              <span className="status-card-icon"> </span>
               <div>
                 <span>Camera</span>
                 <strong className={cameraActive ? "status-active" : ""}>
@@ -247,7 +250,7 @@ export default function CreateReel() {
               </div>
             </div>
             <div className="create-status-card">
-              <span className="status-card-icon">🎤</span>
+              <span className="status-card-icon"> </span>
               <div>
                 <span>Microphone</span>
                 <strong className={cameraActive ? "status-active" : ""}>
@@ -255,11 +258,9 @@ export default function CreateReel() {
                 </strong>
               </div>
             </div>
-
           </div>
         </section>
       </main>
-
       {/* Right Sidebar */}
       <aside className="ig-right create-right">
         <div className="create-right-profile">
@@ -271,8 +272,8 @@ export default function CreateReel() {
         </div>
         <div className="create-right-heading">Your Session Status</div>
         <div className="ig-footer">
-          About · Help · Privacy · Terms · API · Locations <br />
-          <p>© 2026 INSTAGRAM FROM META</p>
+          About   Help   Privacy   Terms   API   Locations <br />
+          <p>  2026 INSTAGRAM FROM META</p>
         </div>
       </aside>
     </div>
