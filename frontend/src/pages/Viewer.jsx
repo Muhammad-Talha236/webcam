@@ -384,411 +384,265 @@ function Viewer() {
       ? "monitor-status active"
       : "monitor-status";
 
-  return (
-    <div className="security-dashboard">
-
-      {/* ==============================
-          HEADER
-      ============================== */}
-
-      <header className="security-header">
-
-        <div className="security-brand">
-
-          <div className="brand-mark">
+return (
+    <div className="min-h-screen bg-[#07090e] text-slate-200 font-mono selection:bg-emerald-500/30 selection:text-emerald-300">
+      
+      {/* HEADER */}
+      <header className="h-16 border-b border-slate-800/80 bg-[#0b0f17]/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-50">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg border border-emerald-500/30 bg-emerald-500/10 grid place-items-center font-bold text-xs tracking-wider text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
             RL
           </div>
-
           <div>
-            <h1>
+            <h1 className="text-xs font-bold tracking-[0.2em] text-slate-100 uppercase">
               SECURE MEDIA LAB
             </h1>
-
-            <p>
+            <p className="text-[9px] text-slate-500 tracking-wider">
               AUTHORIZED WEBRTC TEST ENVIRONMENT
             </p>
           </div>
-
         </div>
 
-        <div className="header-status">
-
+        <div className="flex items-center gap-2.5 text-xs font-medium bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800">
           <span
-            className={
-              connected
-                ? "system-dot online"
-                : "system-dot"
-            }
+            className={`w-2 h-2 rounded-full ${
+              connected 
+                ? "bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" 
+                : "bg-rose-500 shadow-[0_0_8px_#f43f5e]"
+            }`}
           />
-
-          <span>
-            {connected
-              ? "SYSTEM ONLINE"
-              : "SYSTEM OFFLINE"}
+          <span className="text-[11px] tracking-wider text-slate-300">
+            {connected ? "SYSTEM ONLINE" : "SYSTEM OFFLINE"}
           </span>
-
         </div>
-
       </header>
 
-      {/* ==============================
-          LAYOUT
-      ============================== */}
+      {/* LAYOUT */}
+      <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] min-h-[calc(100vh-64px)]">
 
-      <div className="security-layout">
-
-        {/* ============================
-            SIDEBAR
-        ============================ */}
-
-        <aside className="security-sidebar">
-
-          <div className="side-section-title">
+        {/* SIDEBAR */}
+        <aside className="border-r border-slate-800/60 bg-[#090d14] p-5 hidden md:block">
+          <div className="text-[10px] text-slate-500 tracking-widest uppercase mb-3 font-semibold">
             MONITOR
           </div>
 
-          <div className="side-item selected">
-            <span>01</span>
-            LIVE FEED
+          <div className="space-y-1">
+            <div className="h-9 rounded-md flex items-center gap-3 text-xs px-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-medium">
+              <span className="text-emerald-500 font-mono">01</span> LIVE FEED
+            </div>
+            <div className="h-9 rounded-md flex items-center gap-3 text-xs px-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 cursor-pointer transition">
+              <span className="text-slate-600 font-mono">02</span> CONNECTION
+            </div>
+            <div className="h-9 rounded-md flex items-center gap-3 text-xs px-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 cursor-pointer transition">
+              <span className="text-slate-600 font-mono">03</span> MEDIA STATUS
+            </div>
+            <div className="h-9 rounded-md flex items-center gap-3 text-xs px-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 cursor-pointer transition">
+              <span className="text-slate-600 font-mono">04</span> EVENT LOG
+            </div>
           </div>
 
-          <div className="side-item">
-            <span>02</span>
-            CONNECTION
-          </div>
+          <div className="h-px bg-slate-800/60 my-6" />
 
-          <div className="side-item">
-            <span>03</span>
-            MEDIA STATUS
-          </div>
-
-          <div className="side-item">
-            <span>04</span>
-            EVENT LOG
-          </div>
-
-          <div className="sidebar-divider" />
-
-          <div className="side-section-title">
+          <div className="text-[10px] text-slate-500 tracking-widest uppercase mb-3 font-semibold">
             PROTOCOL
           </div>
 
-          <div className="protocol-row">
-            <span>WS</span>
-            <b className={connected ? "ok" : ""}>
-              {connected
-                ? "CONNECTED"
-                : "OFFLINE"}
-            </b>
+          <div className="space-y-2.5 text-xs">
+            <div className="flex justify-between items-center bg-slate-900/40 p-2 rounded border border-slate-800/40">
+              <span className="text-slate-400">WS</span>
+              <b className={`font-mono ${connected ? "text-emerald-400" : "text-rose-400"}`}>
+                {connected ? "CONNECTED" : "OFFLINE"}
+              </b>
+            </div>
+
+            <div className="flex justify-between items-center bg-slate-900/40 p-2 rounded border border-slate-800/40">
+              <span className="text-slate-400">RTC</span>
+              <b className={`font-mono ${webRTCState === "connected" ? "text-emerald-400" : "text-amber-400"}`}>
+                {webRTCState.toUpperCase()}
+              </b>
+            </div>
           </div>
 
-          <div className="protocol-row">
-            <span>RTC</span>
-            <b
-              className={
-                webRTCState ===
-                "connected"
-                  ? "ok"
-                  : ""
-              }
-            >
-              {webRTCState.toUpperCase()}
-            </b>
-          </div>
-
-          <div className="sidebar-footer">
+          <div className="mt-20 text-[10px] text-slate-600 font-mono">
             LAB BUILD 2026.1
           </div>
-
         </aside>
 
-        {/* ============================
-            MAIN
-        ============================ */}
+        {/* MAIN CONTENT */}
+        <main className="p-6 md:p-8 max-w-5xl w-full mx-auto space-y-6">
 
-        <main className="security-main">
-
-          <div className="main-heading">
-
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <div className="eyebrow">
+              <div className="text-[10px] text-emerald-400 tracking-widest uppercase font-semibold">
                 MEDIA MONITOR / 01
               </div>
-
-              <h2>
+              <h2 className="text-2xl font-bold tracking-tight text-white mt-1">
                 Live Capture Feed
               </h2>
-
-              <p>
-                Authorized camera and microphone
-                WebRTC test stream.
+              <p className="text-xs text-slate-400 mt-1">
+                Authorized camera and microphone WebRTC test stream.
               </p>
             </div>
 
-            <div className="session-state">
-
-              <span
-                className={
-                  streaming
-                    ? "pulse-dot"
-                    : ""
-                }
-              />
-
-              {streaming
-                ? "STREAM ACTIVE"
-                : "NO ACTIVE STREAM"}
-
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-900/80 px-3 py-1.5 rounded-md border border-slate-800">
+              <span className={`w-2 h-2 rounded-full ${streaming ? "bg-emerald-400 animate-ping" : "bg-slate-600"}`} />
+              <span className={streaming ? "text-emerald-400 font-semibold" : "text-slate-400"}>
+                {streaming ? "STREAM ACTIVE" : "NO ACTIVE STREAM"}
+              </span>
             </div>
-
           </div>
 
-          {/* ==========================
-              VIDEO MONITOR
-          ========================== */}
-
-          <section className="monitor">
-
-            <div className="monitor-topbar">
-
-              <span>
-                LIVE_MEDIA_MONITOR
-              </span>
-
-              <span>
-                PROTOCOL: WEBRTC
-              </span>
-
-              <span>
-                ENCRYPTED TRANSPORT
-              </span>
-
+          {/* VIDEO MONITOR FRAME */}
+          <section className="border border-slate-800 bg-[#0b0f17] rounded-xl overflow-hidden shadow-2xl">
+            <div className="h-9 border-b border-slate-800/80 px-4 flex items-center justify-between text-[10px] text-slate-400 tracking-wider bg-slate-900/30">
+              <span>LIVE_MEDIA_MONITOR</span>
+              <span>PROTOCOL: WEBRTC</span>
+              <span className="hidden sm:inline">ENCRYPTED TRANSPORT</span>
             </div>
 
-            <div className="video-area">
-
+            <div className="relative aspect-video max-h-[550px] bg-black/90 flex items-center justify-center overflow-hidden">
               <video
                 ref={videoRef}
                 autoPlay
                 playsInline
                 controls
-                className={
-                  streaming
-                    ? "remote-feed visible"
-                    : "remote-feed"
-                }
+                className={`w-full h-full object-contain ${
+                  streaming ? "block" : "hidden"
+                }`}
               />
 
               {!streaming && (
-                <div className="no-feed">
-
-                  <div className="no-feed-icon">
+                <div className="text-center p-8 space-y-3">
+                  <div className="w-14 h-14 border border-slate-800 bg-slate-900/50 rounded-xl grid place-items-center text-slate-400 text-xl mx-auto shadow-inner">
                     ▣
                   </div>
-
-                  <div className="no-feed-title">
+                  <div className="text-xs font-bold text-slate-200 tracking-widest uppercase">
                     NO MEDIA SIGNAL
                   </div>
-
-                  <div className="no-feed-text">
-                    Waiting for an authorized
-                    capture device.
-                  </div>
-
-                  <div className="terminal-line">
+                  <p className="text-xs text-slate-400 max-w-xs mx-auto">
+                    Waiting for an authorized capture device connection.
+                  </p>
+                  <div className="text-[10px] text-emerald-400 font-mono pt-2 animate-pulse">
                     &gt; LISTENING_FOR_WEBRTC...
                   </div>
-
                 </div>
               )}
 
               {streaming && (
-                <div className="live-indicator">
-                  ● LIVE
+                <div className="absolute top-4 left-4 bg-slate-950/80 border border-emerald-500/40 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg">
+                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping" />
+                  LIVE
                 </div>
               )}
-
             </div>
 
-            <div className="monitor-footer">
-
-              <span>
-                SOURCE: CAPTURE CLIENT
+            <div className="h-8 border-t border-slate-800/80 px-4 flex items-center justify-between text-[10px] text-slate-400 bg-slate-900/30">
+              <span>SOURCE: CAPTURE CLIENT</span>
+              <span className={streaming ? "text-emerald-400 font-medium" : "text-slate-400"}>
+                {streaming ? "SIGNAL RECEIVED" : "SIGNAL WAITING"}
               </span>
-
-              <span>
-                {streaming
-                  ? "SIGNAL RECEIVED"
-                  : "SIGNAL WAITING"}
-              </span>
-
             </div>
-
           </section>
 
-          {/* ==========================
-              STATUS GRID
-          ========================== */}
-
-          <section className="status-grid">
-
-            <div className={statusClass(videoActive)}>
-
-              <div className="status-icon">
+          {/* STATUS CARDS GRID */}
+          <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className={`p-3.5 rounded-lg border bg-slate-900/30 flex items-center gap-3 transition-all ${
+              videoActive ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.05)]" : "border-slate-800"
+            }`}>
+              <div className="w-8 h-8 rounded border border-slate-700/60 bg-slate-800/40 grid place-items-center text-[10px] font-bold text-slate-300">
                 VID
               </div>
-
               <div>
-                <span>
-                  VIDEO TRACK
-                </span>
-
-                <strong>
-                  {videoActive
-                    ? "ACTIVE"
-                    : "WAITING"}
+                <span className="block text-[9px] text-slate-400">VIDEO TRACK</span>
+                <strong className={`text-xs ${videoActive ? "text-emerald-400" : "text-slate-400"}`}>
+                  {videoActive ? "ACTIVE" : "WAITING"}
                 </strong>
               </div>
-
             </div>
 
-            <div className={statusClass(audioActive)}>
-
-              <div className="status-icon">
+            <div className={`p-3.5 rounded-lg border bg-slate-900/30 flex items-center gap-3 transition-all ${
+              audioActive ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.05)]" : "border-slate-800"
+            }`}>
+              <div className="w-8 h-8 rounded border border-slate-700/60 bg-slate-800/40 grid place-items-center text-[10px] font-bold text-slate-300">
                 AUD
               </div>
-
               <div>
-                <span>
-                  AUDIO TRACK
-                </span>
-
-                <strong>
-                  {audioActive
-                    ? "ACTIVE"
-                    : "WAITING"}
+                <span className="block text-[9px] text-slate-400">AUDIO TRACK</span>
+                <strong className={`text-xs ${audioActive ? "text-emerald-400" : "text-slate-400"}`}>
+                  {audioActive ? "ACTIVE" : "WAITING"}
                 </strong>
               </div>
-
             </div>
 
-            <div
-              className={statusClass(
-                connected
-              )}
-            >
-
-              <div className="status-icon">
+            <div className={`p-3.5 rounded-lg border bg-slate-900/30 flex items-center gap-3 transition-all ${
+              connected ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.05)]" : "border-slate-800"
+            }`}>
+              <div className="w-8 h-8 rounded border border-slate-700/60 bg-slate-800/40 grid place-items-center text-[10px] font-bold text-slate-300">
                 WS
               </div>
-
               <div>
-                <span>
-                  SIGNALING
-                </span>
-
-                <strong>
-                  {connected
-                    ? "CONNECTED"
-                    : "OFFLINE"}
+                <span className="block text-[9px] text-slate-400">SIGNALING</span>
+                <strong className={`text-xs ${connected ? "text-emerald-400" : "text-slate-400"}`}>
+                  {connected ? "CONNECTED" : "OFFLINE"}
                 </strong>
               </div>
-
             </div>
 
-            <div
-              className={statusClass(
-                webRTCState ===
-                "connected"
-              )}
-            >
-
-              <div className="status-icon">
+            <div className={`p-3.5 rounded-lg border bg-slate-900/30 flex items-center gap-3 transition-all ${
+              webRTCState === "connected" ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.05)]" : "border-slate-800"
+            }`}>
+              <div className="w-8 h-8 rounded border border-slate-700/60 bg-slate-800/40 grid place-items-center text-[10px] font-bold text-slate-300">
                 RTC
               </div>
-
               <div>
-                <span>
-                  WEBRTC
-                </span>
-
-                <strong>
+                <span className="block text-[9px] text-slate-400">WEBRTC</span>
+                <strong className={`text-xs ${webRTCState === "connected" ? "text-emerald-400" : "text-slate-400"}`}>
                   {webRTCState.toUpperCase()}
                 </strong>
               </div>
-
             </div>
-
           </section>
 
-          {/* ==========================
-              EVENT LOG
-          ========================== */}
-
-          <section className="event-panel">
-
-            <div className="panel-heading">
-
+          {/* EVENT LOGS */}
+          <section className="border border-slate-800 bg-[#0b0f17] rounded-xl overflow-hidden shadow-lg">
+            <div className="px-4 py-3 border-b border-slate-800 bg-slate-900/20 flex items-center justify-between">
               <div>
-                <span>
+                <span className="block text-xs font-bold text-slate-200 tracking-wider">
                   SYSTEM EVENTS
                 </span>
-
-                <small>
+                <span className="text-[9px] text-slate-400 uppercase">
                   REAL-TIME SIGNALING LOG
-                </small>
+                </span>
               </div>
-
-              <span className="event-count">
-                {events.length
-                  .toString()
-                  .padStart(2, "0")} EVENTS
+              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                {events.length.toString().padStart(2, "0")} EVENTS
               </span>
-
             </div>
 
-            <div className="event-list">
-
+            <div className="p-4 space-y-2 min-h-[120px] text-xs font-mono">
               {events.length === 0 && (
-                <div className="empty-event">
+                <div className="text-slate-500 py-6 text-center text-xs">
                   No events recorded.
                 </div>
               )}
-
-              {events.map(
-                (event, index) => (
-                  <div
-                    className="event-row"
-                    key={`${event.time}-${index}`}
-                  >
-                    <span>
-                      {event.time}
-                    </span>
-
-                    <b>
-                      {">"}
-                    </b>
-
-                    <p>
-                      {event.message}
-                    </p>
-                  </div>
-                )
-              )}
-
+              {events.map((event, index) => (
+                <div
+                  className="grid grid-cols-[80px_20px_1fr] gap-2 items-center border-b border-slate-800/40 pb-1.5 hover:bg-slate-800/20 px-1 rounded transition"
+                  key={`${event.time}-${index}`}
+                >
+                  <span className="text-slate-400 text-[11px]">{event.time}</span>
+                  <span className="text-emerald-400 font-bold">&gt;</span>
+                  <span className="text-slate-300">{event.message}</span>
+                </div>
+              ))}
             </div>
-
           </section>
 
+          {/* ERROR ALERT */}
           {error && (
-            <div className="security-error">
-              <strong>
-                CONNECTION ERROR
-              </strong>
-
-              <span>
-                {error}
-              </span>
+            <div className="p-3.5 border border-rose-500/30 bg-rose-500/10 text-rose-300 rounded-lg text-xs flex items-center gap-3">
+              <span className="font-bold uppercase tracking-wider text-rose-400">[ERROR]</span>
+              <span>{error}</span>
             </div>
           )}
 

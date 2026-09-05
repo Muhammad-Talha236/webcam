@@ -11,7 +11,7 @@ import Viewer from "./pages/Viewer";
 function App() {
   return (
     <BrowserRouter>
-      <div className="app">
+      <div className="app bg-amber-50">
 
         <Routes>
           <Route path="/" element={<Home />} />
