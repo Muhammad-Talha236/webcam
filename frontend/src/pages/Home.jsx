@@ -16,8 +16,8 @@ const posts = [
     verified: true,
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
     location: "Pakistan",
-    postImg: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=80",
-    caption: "Foreign Tourism in Pakistan is reaching breathtaking new heights! 🏔️✨",
+    postImg: "https://images.unsplash.com/photo-1610312278520-bcc893a3ff1d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+    caption: "Foreign Tourism in Nepal is reaching breathtaking new heights! 🏔️✨",
     likes: "12,482",
     comments: "342",
     time: "1D",
@@ -108,10 +108,10 @@ export default function Home() {
             <span className="text-xl">🧭</span>
             <span className="text-sm font-medium">Explore</span>
           </button>
-          <Link to="/viewer" className="flex items-center gap-4 p-3 rounded-xl hover:bg-neutral-900 transition">
+          <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-neutral-900 transition">
             <span className="text-xl">▶</span>
             <span className="text-sm font-medium">Reels</span>
-          </Link>
+          </button>
           <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-neutral-900 transition">
             <span className="text-xl">💬</span>
             <span className="text-sm font-medium">Messages</span>
